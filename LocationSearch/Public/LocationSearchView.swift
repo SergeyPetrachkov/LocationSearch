@@ -10,7 +10,6 @@ import SwiftUI
 public struct LocationSearchView: View {
 
     @ObservedObject private var viewModel: LocationSearchViewModel
-    @State var searchText = ""
 
     public init(viewModel: LocationSearchViewModel) {
         self.viewModel = viewModel
