@@ -8,17 +8,27 @@
 
 /* Begin PBXBuildFile section */
 		3959A3DE27BB90FF00744515 /* LocationSearchApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3959A3DD27BB90FF00744515 /* LocationSearchApp.swift */; };
-		3959A3E027BB90FF00744515 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3959A3DF27BB90FF00744515 /* ContentView.swift */; };
+		3959A3E027BB90FF00744515 /* LocationSearchView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3959A3DF27BB90FF00744515 /* LocationSearchView.swift */; };
 		3959A3E227BB910000744515 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 3959A3E127BB910000744515 /* Assets.xcassets */; };
 		3959A3E527BB910000744515 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 3959A3E427BB910000744515 /* Preview Assets.xcassets */; };
+		3959A3EC27BB916200744515 /* LocationSearchViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3959A3EB27BB916100744515 /* LocationSearchViewModel.swift */; };
+		3959A3EE27BB927F00744515 /* LocationSearchProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3959A3ED27BB927F00744515 /* LocationSearchProvider.swift */; };
+		3959A3F027BB93F800744515 /* AppleGeocoder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3959A3EF27BB93F800744515 /* AppleGeocoder.swift */; };
+		3959A3F427BBAF5A00744515 /* SearchBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3959A3F327BBAF5A00744515 /* SearchBar.swift */; };
+		3959A3F627BBB0E500744515 /* LocationItemViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3959A3F527BBB0E500744515 /* LocationItemViewModel.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		3959A3DA27BB90FF00744515 /* LocationSearch.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = LocationSearch.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		3959A3DD27BB90FF00744515 /* LocationSearchApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationSearchApp.swift; sourceTree = "<group>"; };
-		3959A3DF27BB90FF00744515 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		3959A3DF27BB90FF00744515 /* LocationSearchView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationSearchView.swift; sourceTree = "<group>"; };
 		3959A3E127BB910000744515 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		3959A3E427BB910000744515 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
+		3959A3EB27BB916100744515 /* LocationSearchViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationSearchViewModel.swift; sourceTree = "<group>"; };
+		3959A3ED27BB927F00744515 /* LocationSearchProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationSearchProvider.swift; sourceTree = "<group>"; };
+		3959A3EF27BB93F800744515 /* AppleGeocoder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppleGeocoder.swift; sourceTree = "<group>"; };
+		3959A3F327BBAF5A00744515 /* SearchBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchBar.swift; sourceTree = "<group>"; };
+		3959A3F527BBB0E500744515 /* LocationItemViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationItemViewModel.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -51,8 +61,9 @@
 		3959A3DC27BB90FF00744515 /* LocationSearch */ = {
 			isa = PBXGroup;
 			children = (
+				3959A3F227BB980700744515 /* Internal */,
+				3959A3F127BB97FD00744515 /* Public */,
 				3959A3DD27BB90FF00744515 /* LocationSearchApp.swift */,
-				3959A3DF27BB90FF00744515 /* ContentView.swift */,
 				3959A3E127BB910000744515 /* Assets.xcassets */,
 				3959A3E327BB910000744515 /* Preview Content */,
 			);
@@ -65,6 +76,26 @@
 				3959A3E427BB910000744515 /* Preview Assets.xcassets */,
 			);
 			path = "Preview Content";
+			sourceTree = "<group>";
+		};
+		3959A3F127BB97FD00744515 /* Public */ = {
+			isa = PBXGroup;
+			children = (
+				3959A3EB27BB916100744515 /* LocationSearchViewModel.swift */,
+				3959A3DF27BB90FF00744515 /* LocationSearchView.swift */,
+				3959A3ED27BB927F00744515 /* LocationSearchProvider.swift */,
+				3959A3F527BBB0E500744515 /* LocationItemViewModel.swift */,
+			);
+			path = Public;
+			sourceTree = "<group>";
+		};
+		3959A3F227BB980700744515 /* Internal */ = {
+			isa = PBXGroup;
+			children = (
+				3959A3EF27BB93F800744515 /* AppleGeocoder.swift */,
+				3959A3F327BBAF5A00744515 /* SearchBar.swift */,
+			);
+			path = Internal;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -137,8 +168,13 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				3959A3E027BB90FF00744515 /* ContentView.swift in Sources */,
+				3959A3F627BBB0E500744515 /* LocationItemViewModel.swift in Sources */,
+				3959A3EC27BB916200744515 /* LocationSearchViewModel.swift in Sources */,
+				3959A3F027BB93F800744515 /* AppleGeocoder.swift in Sources */,
+				3959A3EE27BB927F00744515 /* LocationSearchProvider.swift in Sources */,
+				3959A3E027BB90FF00744515 /* LocationSearchView.swift in Sources */,
 				3959A3DE27BB90FF00744515 /* LocationSearchApp.swift in Sources */,
+				3959A3F427BBAF5A00744515 /* SearchBar.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -276,6 +312,7 @@
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -304,6 +341,7 @@
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",

@@ -9,9 +9,10 @@ import SwiftUI
 
 @main
 struct LocationSearchApp: App {
+
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            LocationSearchView(viewModel: LocationSearchViewModel(locationService: InternalGeocoder()))
         }
     }
 }
