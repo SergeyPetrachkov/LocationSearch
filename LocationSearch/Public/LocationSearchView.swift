@@ -34,6 +34,11 @@ public struct LocationSearchView: View {
 
 struct LocationSearchView_Previews: PreviewProvider {
     static var previews: some View {
-        LocationSearchView(viewModel: LocationSearchViewModel(locationService: InternalGeocoder()))
+        LocationSearchView(
+            viewModel: LocationSearchViewModel(
+                locationService: InternalGeocoder(),
+                queryConstructor: SearchQueryConstructor()
+            )
+        )
     }
 }

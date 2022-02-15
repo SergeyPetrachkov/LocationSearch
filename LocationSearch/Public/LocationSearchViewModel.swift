@@ -31,11 +31,15 @@ public final class LocationSearchViewModel: ObservableObject {
     private var searchOperation: AnyCancellable?
 
     private let locationService: LocationSearchProviding
+    private let queryConstructor: LocationQueryConstructing
     let uiConfig: Configurator
 
-    public init(uiConfig: Configurator = .default(), locationService: LocationSearchProviding) {
+    public init(uiConfig: Configurator = .default(),
+                locationService: LocationSearchProviding,
+                queryConstructor: LocationQueryConstructing) {
         self.uiConfig = uiConfig
         self.locationService = locationService
+        self.queryConstructor = queryConstructor
         self.cancellable = $currentSearchTerm
             .removeDuplicates()
             .debounce(for: 1, scheduler: DispatchQueue.main).sink { value in
@@ -56,7 +60,7 @@ public final class LocationSearchViewModel: ObservableObject {
 
     private func search(term: String) {
         searchOperation = locationService
-            .search(query: InternalGeocoder.Query(searchTerm: term))
+            .search(query: queryConstructor.request(from: term))
             .sink(
                 receiveCompletion: { [weak self] completion in
                     guard let self = self else {

@@ -12,7 +12,7 @@ struct LocationSearchApp: App {
 
     var body: some Scene {
         WindowGroup {
-            LocationSearchView(viewModel: LocationSearchViewModel(locationService: InternalGeocoder()))
+            LocationSearchView(viewModel: LocationSearchViewModel(locationService: InternalGeocoder(), queryConstructor: SearchQueryConstructor()))
         }
     }
 }

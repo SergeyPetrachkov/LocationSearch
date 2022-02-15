@@ -16,6 +16,8 @@
 		3959A3F027BB93F800744515 /* AppleGeocoder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3959A3EF27BB93F800744515 /* AppleGeocoder.swift */; };
 		3959A3F427BBAF5A00744515 /* SearchBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3959A3F327BBAF5A00744515 /* SearchBar.swift */; };
 		3959A3F627BBB0E500744515 /* LocationItemViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3959A3F527BBB0E500744515 /* LocationItemViewModel.swift */; };
+		3959A3F827BBB6E600744515 /* LocationQueryConstructor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3959A3F727BBB6E600744515 /* LocationQueryConstructor.swift */; };
+		3959A3FA27BBB72200744515 /* SearchQueryConstructor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3959A3F927BBB72200744515 /* SearchQueryConstructor.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -29,6 +31,8 @@
 		3959A3EF27BB93F800744515 /* AppleGeocoder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppleGeocoder.swift; sourceTree = "<group>"; };
 		3959A3F327BBAF5A00744515 /* SearchBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchBar.swift; sourceTree = "<group>"; };
 		3959A3F527BBB0E500744515 /* LocationItemViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationItemViewModel.swift; sourceTree = "<group>"; };
+		3959A3F727BBB6E600744515 /* LocationQueryConstructor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationQueryConstructor.swift; sourceTree = "<group>"; };
+		3959A3F927BBB72200744515 /* SearchQueryConstructor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchQueryConstructor.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -85,6 +89,7 @@
 				3959A3DF27BB90FF00744515 /* LocationSearchView.swift */,
 				3959A3ED27BB927F00744515 /* LocationSearchProvider.swift */,
 				3959A3F527BBB0E500744515 /* LocationItemViewModel.swift */,
+				3959A3F727BBB6E600744515 /* LocationQueryConstructor.swift */,
 			);
 			path = Public;
 			sourceTree = "<group>";
@@ -94,6 +99,7 @@
 			children = (
 				3959A3EF27BB93F800744515 /* AppleGeocoder.swift */,
 				3959A3F327BBAF5A00744515 /* SearchBar.swift */,
+				3959A3F927BBB72200744515 /* SearchQueryConstructor.swift */,
 			);
 			path = Internal;
 			sourceTree = "<group>";
@@ -174,6 +180,8 @@
 				3959A3EE27BB927F00744515 /* LocationSearchProvider.swift in Sources */,
 				3959A3E027BB90FF00744515 /* LocationSearchView.swift in Sources */,
 				3959A3DE27BB90FF00744515 /* LocationSearchApp.swift in Sources */,
+				3959A3FA27BBB72200744515 /* SearchQueryConstructor.swift in Sources */,
+				3959A3F827BBB6E600744515 /* LocationQueryConstructor.swift in Sources */,
 				3959A3F427BBAF5A00744515 /* SearchBar.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
