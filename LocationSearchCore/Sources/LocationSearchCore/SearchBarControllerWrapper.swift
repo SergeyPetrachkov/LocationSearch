@@ -67,6 +67,7 @@ struct SearchBar<ResultContent: View>: UIViewControllerRepresentable {
         if let resultView = resultContent(text) {
             (controller.searchController?.searchResultsController as? UIHostingController<ResultContent>)?.rootView = resultView
         }
+        controller.becomeFirstResponder()
     }
 
     func makeCoordinator() -> Coordinator {
@@ -122,7 +123,6 @@ struct SearchBar<ResultContent: View>: UIViewControllerRepresentable {
             }
         }
 
-
         // MARK: - UISearchBarDelegate
         func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
             self.cancelClicked()
@@ -164,6 +164,11 @@ struct SearchBar<ResultContent: View>: UIViewControllerRepresentable {
 
             // make search bar appear at start (default behaviour since iOS 13)
             self.parent?.navigationController?.navigationBar.sizeToFit()
+            // FIXME: What a shame! We need it when present it from UIHostingViewController.
+            // If we don't use DispatchQueue.main.async, nothing will happen.
+            DispatchQueue.main.async {
+                self.searchController?.searchBar.becomeFirstResponder()
+            }
         }
     }
 }

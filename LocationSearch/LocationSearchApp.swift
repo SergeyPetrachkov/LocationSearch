@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import LocationSearchCore
 
 @main
 struct LocationSearchApp: App {

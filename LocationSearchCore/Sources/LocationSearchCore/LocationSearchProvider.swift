@@ -14,6 +14,13 @@ public protocol LocationQuery {
 
 public protocol LocationSearchResultItem {
     var displayString: String { get }
+    var latitude: Double { get }
+    var longitude: Double { get }
+    var shortName: String? { get }
+    var locality: String? { get }
+    var administrativeArea: String? { get }
+    var country: String? { get }
+    var countryCode: String? { get }
 }
 
 public protocol LocationSearchProviding {

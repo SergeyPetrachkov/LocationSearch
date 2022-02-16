@@ -7,20 +7,35 @@
 
 import Foundation
 import Combine
+import UIKit
 
 public final class LocationSearchViewModel: ObservableObject {
 
     public struct Configurator {
         public let placeholder: String
         public let hidesNavigationBarDuringPresentation: Bool
+        public let font: UIFont
+        public let fontColor: UIColor
+        public let backgroundColor: UIColor
 
-        public init(placeholder: String, hidesNavigationBarDuringPresentation: Bool) {
+        public init(placeholder: String,
+                    hidesNavigationBarDuringPresentation: Bool,
+                    font: UIFont,
+                    fontColor: UIColor,
+                    backgroundColor: UIColor) {
             self.placeholder = placeholder
             self.hidesNavigationBarDuringPresentation = hidesNavigationBarDuringPresentation
+            self.font = font
+            self.fontColor = fontColor
+            self.backgroundColor = backgroundColor
         }
 
         public static func `default`() -> Self {
-            .init(placeholder: "Search location", hidesNavigationBarDuringPresentation: true)
+            .init(placeholder: "Search location",
+                  hidesNavigationBarDuringPresentation: true,
+                  font: .systemFont(ofSize: 16, weight: .medium),
+                  fontColor: .black,
+                  backgroundColor: .lightGray)
         }
     }
 
@@ -34,6 +49,8 @@ public final class LocationSearchViewModel: ObservableObject {
     private let queryConstructor: LocationQueryConstructing
     let uiConfig: Configurator
 
+    public var onLocationSelected: ((LocationSearchResultItem) -> Void)?
+
     public init(uiConfig: Configurator = .default(),
                 locationService: LocationSearchProviding,
                 queryConstructor: LocationQueryConstructing) {
@@ -42,7 +59,10 @@ public final class LocationSearchViewModel: ObservableObject {
         self.queryConstructor = queryConstructor
         self.cancellable = $currentSearchTerm
             .removeDuplicates()
-            .debounce(for: 1, scheduler: DispatchQueue.main).sink { value in
+            .debounce(for: 1, scheduler: DispatchQueue.main).sink { [weak self] value in
+                guard let self = self else {
+                    return
+                }
                 if value.count < 3 {
                     self.results = []
                     self.searchOperation?.cancel()
@@ -55,7 +75,7 @@ public final class LocationSearchViewModel: ObservableObject {
     }
 
     func select(item: LocationItemViewModel) {
-        print("Selected \(item)")
+        onLocationSelected?(item.model)
     }
 
     private func search(term: String) {

@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import LocationSearchCore
 
 struct SearchQueryConstructor: LocationQueryConstructing {
     func request(from searchString: String) -> LocationQuery {
