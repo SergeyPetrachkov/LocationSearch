@@ -9,14 +9,22 @@ import Foundation
 import Combine
 import UIKit
 
+public protocol LocationSearchbarConfiguring {
+    var placeholder: String { get }
+    var hidesNavigationBarDuringPresentation: Bool { get }
+    var font: UIFont? { get }
+    var fontColor: UIColor? { get }
+    var backgroundColor: UIColor? { get }
+}
+
 public final class LocationSearchViewModel: ObservableObject {
 
-    public struct Configurator {
+    public struct Configurator: LocationSearchbarConfiguring {
         public let placeholder: String
         public let hidesNavigationBarDuringPresentation: Bool
-        public let font: UIFont
-        public let fontColor: UIColor
-        public let backgroundColor: UIColor
+        public let font: UIFont?
+        public let fontColor: UIColor?
+        public let backgroundColor: UIColor?
 
         public init(placeholder: String,
                     hidesNavigationBarDuringPresentation: Bool,
@@ -34,8 +42,8 @@ public final class LocationSearchViewModel: ObservableObject {
             .init(placeholder: "Search location",
                   hidesNavigationBarDuringPresentation: true,
                   font: .systemFont(ofSize: 16, weight: .medium),
-                  fontColor: .black,
-                  backgroundColor: .lightGray)
+                  fontColor: UIColor(red: 75.0 / 255.0, green: 90.0 / 255.0, blue: 108.0 / 255.0, alpha: 1.0),
+                  backgroundColor: UIColor(red: 231.0 / 255.0, green: 234.0 / 255.0, blue: 238.0 / 255.0, alpha: 1.0))
         }
     }
 
@@ -66,8 +74,7 @@ public final class LocationSearchViewModel: ObservableObject {
                 if value.count < 3 {
                     self.results = []
                     self.searchOperation?.cancel()
-                }
-                else {
+                } else {
                     self.searchOperation?.cancel()
                     self.search(term: value)
                 }

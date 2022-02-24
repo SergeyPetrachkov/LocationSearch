@@ -23,11 +23,17 @@ public struct LocationSearchView: View {
                         viewModel.select(item: item)
                     }
             }
-            .navigationBarSearch(
-                $viewModel.currentSearchTerm,
-                placeholder: viewModel.uiConfig.placeholder,
-                hidesNavigationBarDuringPresentation: viewModel.uiConfig.hidesNavigationBarDuringPresentation
-            )
+            .navigationBarSearch($viewModel.currentSearchTerm,
+                                 uiConfig: viewModel.uiConfig)
+            .navigationTitle(viewModel.uiConfig.placeholder)
+            .navigationBarTitleDisplayMode(.inline)
+//            .navigationBarSearch(
+//                $viewModel.currentSearchTerm,
+//                placeholder: viewModel.uiConfig.placeholder,
+//                hidesNavigationBarDuringPresentation: viewModel.uiConfig.hidesNavigationBarDuringPresentation
+//            )
+//            .navigationTitle(viewModel.uiConfig.placeholder)
+//            .navigationBarTitleDisplayMode(.inline)
         }
     }
 }

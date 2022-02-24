@@ -20,34 +20,70 @@ import SwiftUI
 import Combine
 
 public extension View {
-    @available(iOS, introduced: 13.0, deprecated: 15.0, message: "Use .searchable() and .onSubmit(of:) instead.")
-    @available(macCatalyst, introduced: 13.0, deprecated: 15.0, message: "Use .searchable() and .onSubmit(of:) instead.")
-    func navigationBarSearch(_ searchText: Binding<String>, placeholder: String? = nil, hidesNavigationBarDuringPresentation: Bool = true, hidesSearchBarWhenScrolling: Bool = true, cancelClicked: @escaping () -> Void = {}, searchClicked: @escaping () -> Void = {}) -> some View {
-        return overlay(SearchBar<AnyView>(text: searchText, placeholder: placeholder, hidesNavigationBarDuringPresentation: hidesNavigationBarDuringPresentation, hidesSearchBarWhenScrolling: hidesSearchBarWhenScrolling, cancelClicked: cancelClicked, searchClicked: searchClicked).frame(width: 0, height: 0))
-    }
 
     @available(iOS, introduced: 13.0, deprecated: 15.0, message: "Use .searchable() and .onSubmit(of:) instead.")
     @available(macCatalyst, introduced: 13.0, deprecated: 15.0, message: "Use .searchable() and .onSubmit(of:) instead.")
-    func navigationBarSearch<ResultContent: View>(_ searchText: Binding<String>, placeholder: String? = nil, hidesNavigationBarDuringPresentation: Bool = true, hidesSearchBarWhenScrolling: Bool = true, cancelClicked: @escaping () -> Void = {}, searchClicked: @escaping () -> Void = {}, @ViewBuilder resultContent: @escaping (String) -> ResultContent) -> some View {
-        return overlay(SearchBar(text: searchText, placeholder: placeholder, hidesNavigationBarDuringPresentation: hidesNavigationBarDuringPresentation, hidesSearchBarWhenScrolling: hidesSearchBarWhenScrolling, cancelClicked: cancelClicked, searchClicked: searchClicked, resultContent: resultContent).frame(width: 0, height: 0))
+    func navigationBarSearch(_ searchText: Binding<String>,
+                             uiConfig: LocationSearchbarConfiguring,
+                             cancelClicked: @escaping () -> Void = {}, searchClicked: @escaping () -> Void = {}) -> some View {
+        return overlay(SearchBar<AnyView>(text: searchText, uiConfig: uiConfig, cancelClicked: cancelClicked, searchClicked: searchClicked).frame(width: 0, height: 0))
+    }
+}
+
+public struct SearchBarConfigurator {
+    let text: String
+    let placeholder: String?
+    let hidesNavigationBarDuringPresentation: Bool
+    let hidesSearchBarWhenScrolling: Bool
+    let font: UIFont?
+    let textColor: UIColor?
+    let tintColor: UIColor?
+    let placeholderColor: UIColor?
+    let backgroundColor: UIColor?
+
+    public init(text: String,
+                placeholder: String?,
+                hidesNavigationBarDuringPresentation: Bool,
+                hidesSearchBarWhenScrolling: Bool,
+                font: UIFont?,
+                textColor: UIColor?,
+                tintColor: UIColor?,
+                placeholderColor: UIColor?,
+                backgroundColor: UIColor?) {
+        self.text = text
+        self.placeholder = placeholder
+        self.hidesNavigationBarDuringPresentation = hidesNavigationBarDuringPresentation
+        self.hidesSearchBarWhenScrolling = hidesSearchBarWhenScrolling
+        self.font = font
+        self.textColor = textColor
+        self.tintColor = tintColor
+        self.placeholderColor = placeholderColor
+        self.backgroundColor = backgroundColor
     }
 }
 
 struct SearchBar<ResultContent: View>: UIViewControllerRepresentable {
+
     @Binding
     var text: String
     let placeholder: String?
     let hidesNavigationBarDuringPresentation: Bool
     let hidesSearchBarWhenScrolling: Bool
+    let uiConfig: LocationSearchbarConfiguring
     let cancelClicked: () -> Void
     let searchClicked: () -> Void
     let resultContent: (String) -> ResultContent?
 
-    init(text: Binding<String>, placeholder: String?, hidesNavigationBarDuringPresentation: Bool, hidesSearchBarWhenScrolling: Bool, cancelClicked: @escaping () -> Void, searchClicked: @escaping () -> Void, @ViewBuilder resultContent: @escaping (String) -> ResultContent? = { _ in nil }) {
+    init(text: Binding<String>,
+         uiConfig: LocationSearchbarConfiguring,
+         cancelClicked: @escaping () -> Void,
+         searchClicked: @escaping () -> Void,
+         @ViewBuilder resultContent: @escaping (String) -> ResultContent? = { _ in nil }) {
         self._text = text
-        self.placeholder = placeholder
-        self.hidesNavigationBarDuringPresentation = hidesNavigationBarDuringPresentation
-        self.hidesSearchBarWhenScrolling = hidesSearchBarWhenScrolling
+        self.uiConfig = uiConfig
+        self.placeholder = uiConfig.placeholder
+        self.hidesNavigationBarDuringPresentation = uiConfig.hidesNavigationBarDuringPresentation
+        self.hidesSearchBarWhenScrolling = false
         self.cancelClicked = cancelClicked
         self.searchClicked = searchClicked
         self.resultContent = resultContent
@@ -60,6 +96,18 @@ struct SearchBar<ResultContent: View>: UIViewControllerRepresentable {
     func updateUIViewController(_ controller: SearchBarWrapperController, context: Context) {
         controller.searchController = context.coordinator.searchController
         controller.hidesSearchBarWhenScrolling = hidesSearchBarWhenScrolling
+        controller.searchController?.searchBar.autocapitalizationType = .none
+        controller.searchController?.searchBar.barStyle = .default
+        controller.searchController?.searchBar.tintColor = uiConfig.fontColor
+        controller.searchController?.searchBar.barTintColor = .white
+        controller.searchController?.searchBar.isTranslucent = false
+        controller.searchController?.searchBar.showsCancelButton = true
+        controller.searchController?.searchBar.searchTextField.font = uiConfig.font
+        controller.searchController?.searchBar.searchTextField.backgroundColor = uiConfig.backgroundColor
+        controller.searchController?.searchBar.searchTextField.tintColor = uiConfig.fontColor
+        controller.searchController?.searchBar.searchTextField.textColor = uiConfig.fontColor
+        controller.searchController?.searchBar.searchTextField.attributedPlaceholder = .init(string: uiConfig.placeholder,
+                                                                                             attributes: [.font: uiConfig.font])
         controller.text = text
 
         context.coordinator.update(placeholder: placeholder, cancelClicked: cancelClicked, searchClicked: searchClicked)
@@ -105,7 +153,7 @@ struct SearchBar<ResultContent: View>: UIViewControllerRepresentable {
         }
 
         func update(placeholder: String?, cancelClicked: @escaping () -> Void, searchClicked: @escaping () -> Void) {
-            searchController.searchBar.placeholder = placeholder
+//            searchController.searchBar.placeholder = placeholder
 
             self.cancelClicked = cancelClicked
             self.searchClicked = searchClicked
@@ -133,6 +181,7 @@ struct SearchBar<ResultContent: View>: UIViewControllerRepresentable {
     }
 
     class SearchBarWrapperController: UIViewController {
+
         var text: String? {
             didSet {
                 self.parent?.navigationItem.searchController?.searchBar.text = text
@@ -150,6 +199,32 @@ struct SearchBar<ResultContent: View>: UIViewControllerRepresentable {
                 self.parent?.navigationItem.hidesSearchBarWhenScrolling = hidesSearchBarWhenScrolling
             }
         }
+//
+//        var font: UIFont = UIFont.systemFont(ofSize: 16, weight: .medium) {
+//            didSet {
+//                self.parent?.navigationItem.searchController?.searchBar.searchTextField.font = font
+//            }
+//        }
+//
+//        var textColor: UIColor? {
+//            didSet {
+//                self.parent?.navigationItem.searchController?.searchBar.searchTextField.textColor = textColor
+//            }
+//        }
+//
+//        var backgroundColor: UIColor? {
+//            didSet {
+//                self.parent?.navigationItem.searchController?.searchBar.searchTextField.backgroundColor = backgroundColor
+//            }
+//        }
+//
+//        var tintColor: UIColor? {
+//            didSet {
+//                if let tintColor = tintColor {
+//                    self.parent?.navigationItem.searchController?.searchBar.searchTextField.tintColor = tintColor
+//                }
+//            }
+//        }
 
         override func viewWillAppear(_ animated: Bool) {
             setup()
