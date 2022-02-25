@@ -7,62 +7,50 @@
 
 import Foundation
 import Combine
-import UIKit
-
-public protocol LocationSearchbarConfiguring {
-    var placeholder: String { get }
-    var hidesNavigationBarDuringPresentation: Bool { get }
-    var font: UIFont? { get }
-    var fontColor: UIColor? { get }
-    var backgroundColor: UIColor? { get }
-}
 
 public final class LocationSearchViewModel: ObservableObject {
 
-    public struct Configurator: LocationSearchbarConfiguring {
-        public let placeholder: String
-        public let hidesNavigationBarDuringPresentation: Bool
-        public let font: UIFont?
-        public let fontColor: UIColor?
-        public let backgroundColor: UIColor?
+    // MARK: - Injectable properties
 
-        public init(placeholder: String,
-                    hidesNavigationBarDuringPresentation: Bool,
-                    font: UIFont,
-                    fontColor: UIColor,
-                    backgroundColor: UIColor) {
-            self.placeholder = placeholder
-            self.hidesNavigationBarDuringPresentation = hidesNavigationBarDuringPresentation
-            self.font = font
-            self.fontColor = fontColor
-            self.backgroundColor = backgroundColor
-        }
+    private let locationService: LocationSearchProviding
+    private let queryConstructor: LocationQueryConstructing
 
-        public static func `default`() -> Self {
-            .init(placeholder: "Search location",
-                  hidesNavigationBarDuringPresentation: true,
-                  font: .systemFont(ofSize: 16, weight: .medium),
-                  fontColor: UIColor(red: 75.0 / 255.0, green: 90.0 / 255.0, blue: 108.0 / 255.0, alpha: 1.0),
-                  backgroundColor: UIColor(red: 231.0 / 255.0, green: 234.0 / 255.0, blue: 238.0 / 255.0, alpha: 1.0))
+    public var onLocationSelected: ((LocationSearchResultItem) -> Void)?
+
+    // MARK: - State
+
+    public enum State {
+        case loaded([LocationItemViewModel])
+        case loading
+        case failed(Error)
+    }
+
+    @Published private(set) var state: State
+    @Published var currentSearchTerm: String = ""
+
+    var locations: [LocationItemViewModel] {
+        switch self.state {
+        case .loaded(let locations):
+            return locations
+        case .loading:
+            return []
+        case .failed(_):
+            return []
         }
     }
 
-    @Published private(set) var results: [LocationItemViewModel] = []
-    @Published var currentSearchTerm: String = ""
+    // MARK: - Combine internals
 
     private var cancellable: AnyCancellable?
     private var searchOperation: AnyCancellable?
 
-    private let locationService: LocationSearchProviding
-    private let queryConstructor: LocationQueryConstructing
-    let uiConfig: Configurator
+    // MARK: - Initializer
 
-    public var onLocationSelected: ((LocationSearchResultItem) -> Void)?
-
-    public init(uiConfig: Configurator = .default(),
-                locationService: LocationSearchProviding,
-                queryConstructor: LocationQueryConstructing) {
-        self.uiConfig = uiConfig
+    public init(
+        initialState: State = .loaded([]),
+        locationService: LocationSearchProviding,
+        queryConstructor: LocationQueryConstructing) {
+        self.state = initialState
         self.locationService = locationService
         self.queryConstructor = queryConstructor
         self.cancellable = $currentSearchTerm
@@ -72,18 +60,23 @@ public final class LocationSearchViewModel: ObservableObject {
                     return
                 }
                 if value.count < 3 {
-                    self.results = []
                     self.searchOperation?.cancel()
+                    self.state = .loaded([])
                 } else {
+                    self.state = .loading
                     self.searchOperation?.cancel()
                     self.search(term: value)
                 }
             }
     }
 
+    // MARK: - Interface
+
     func select(item: LocationItemViewModel) {
         onLocationSelected?(item.model)
     }
+
+    // MARK: - Private
 
     private func search(term: String) {
         searchOperation = locationService
@@ -97,14 +90,15 @@ public final class LocationSearchViewModel: ObservableObject {
                     case .finished:
                         break
                     case .failure(let error):
-                        self.results.removeAll()
+                        self.state = .failed(error)
                     }
                 },
                 receiveValue: { [weak self] values in
                     guard let self = self else {
                         return
                     }
-                    self.results = self.map(values)
+                    let mappedResults = self.map(values)
+                    self.state = .loaded(mappedResults)
                 }
             )
     }

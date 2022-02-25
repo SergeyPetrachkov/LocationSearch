@@ -97,17 +97,18 @@ struct SearchBar<ResultContent: View>: UIViewControllerRepresentable {
         controller.searchController = context.coordinator.searchController
         controller.hidesSearchBarWhenScrolling = hidesSearchBarWhenScrolling
         controller.searchController?.searchBar.autocapitalizationType = .none
-        controller.searchController?.searchBar.barStyle = .default
         controller.searchController?.searchBar.tintColor = uiConfig.fontColor
         controller.searchController?.searchBar.barTintColor = .white
-        controller.searchController?.searchBar.isTranslucent = false
+        controller.searchController?.searchBar.isTranslucent = true
         controller.searchController?.searchBar.showsCancelButton = true
         controller.searchController?.searchBar.searchTextField.font = uiConfig.font
         controller.searchController?.searchBar.searchTextField.backgroundColor = uiConfig.backgroundColor
-        controller.searchController?.searchBar.searchTextField.tintColor = uiConfig.fontColor
+//        controller.searchController?.searchBar.searchTextField.tintColor = uiConfig.fontColor
         controller.searchController?.searchBar.searchTextField.textColor = uiConfig.fontColor
-        controller.searchController?.searchBar.searchTextField.attributedPlaceholder = .init(string: uiConfig.placeholder,
-                                                                                             attributes: [.font: uiConfig.font])
+//        if let font = uiConfig.fontColor {
+//            controller.searchController?.searchBar.searchTextField.attributedPlaceholder = .init(string: uiConfig.placeholder,
+//                                                                                                 attributes: [.font: font])
+//        }
         controller.text = text
 
         context.coordinator.update(placeholder: placeholder, cancelClicked: cancelClicked, searchClicked: searchClicked)
@@ -199,32 +200,6 @@ struct SearchBar<ResultContent: View>: UIViewControllerRepresentable {
                 self.parent?.navigationItem.hidesSearchBarWhenScrolling = hidesSearchBarWhenScrolling
             }
         }
-//
-//        var font: UIFont = UIFont.systemFont(ofSize: 16, weight: .medium) {
-//            didSet {
-//                self.parent?.navigationItem.searchController?.searchBar.searchTextField.font = font
-//            }
-//        }
-//
-//        var textColor: UIColor? {
-//            didSet {
-//                self.parent?.navigationItem.searchController?.searchBar.searchTextField.textColor = textColor
-//            }
-//        }
-//
-//        var backgroundColor: UIColor? {
-//            didSet {
-//                self.parent?.navigationItem.searchController?.searchBar.searchTextField.backgroundColor = backgroundColor
-//            }
-//        }
-//
-//        var tintColor: UIColor? {
-//            didSet {
-//                if let tintColor = tintColor {
-//                    self.parent?.navigationItem.searchController?.searchBar.searchTextField.tintColor = tintColor
-//                }
-//            }
-//        }
 
         override func viewWillAppear(_ animated: Bool) {
             setup()
